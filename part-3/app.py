@@ -54,6 +54,17 @@ class Student(db.Model):  # Student table
 
     def __repr__(self):
         return f'<Student {self.name}>'
+    
+class Teacher(db.Model):  # Teacher table
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable=False)
+    email = db.Column(db.String(120), unique=True, nullable=False)  # unique=True means no duplicates
+
+    # Relationship: One Teacher has Many Courses
+    courses = db.relationship('Course', backref='teacher', lazy=True)
+
+    def __repr__(self):
+        return f'<Teacher {self.name}>'
 
 
 # =============================================================================
@@ -138,6 +149,23 @@ def add_course():
 
     return render_template('add_course.html')
 
+
+@app.route('/search')
+def search_students():
+    students = Student.query.filter(Student.name.like('%a%')).all()
+    return render_template('index.html', students=students)
+
+
+@app.route('/students/sorted')
+def sorted_students():
+    students = Student.query.order_by(Student.name).all()
+    return render_template('index.html', students=students)
+
+
+@app.route('/students/limited')
+def limited_students():
+    students = Student.query.limit(2).all()
+    return render_template('index.html', students=students)
 
 # =============================================================================
 # CREATE TABLES AND ADD SAMPLE DATA
