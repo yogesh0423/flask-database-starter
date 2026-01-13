@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Search Students</title>
+    <style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 40px;
+        background: #f0f4f8;
+    }
+
+    h1, h2 {
+        color: #2c3e50;
+    }
+
+    nav {
+        margin-bottom: 20px;
+    }
+
+    nav a {
+        margin-right: 15px;
+        color: #3498db;
+        text-decoration: none;
+        font-weight: bold;
+    }
+
+    .search-card {
+        background: white;
+        padding: 20px;
+        margin: 15px 0;
+        border-radius: 8px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    .search-card input {
+        padding: 10px;
+        width: 250px;
+        margin-right: 10px;
+        border-radius: 4px;
+        border: 1px solid #ccc;
+    }
+
+    .search-card button {
+        padding: 10px 20px;
+        background: #27ae60;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    .course-card {
+        background: white;
+        padding: 20px;
+        margin: 15px 0;
+        border-radius: 8px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    .course-card h3 {
+        margin: 0 0 10px 0;
+        color: #9b59b6;
+    }
+
+    .course-card p {
+        color: #666;
+        margin: 5px 0;
+    }
+
+    .student-count {
+        background: #9b59b6;
+        color: white;
+        padding: 4px 12px;
+        border-radius: 12px;
+        font-size: 14px;
+    }
+
+    .flash {
+        padding: 15px;
+        margin: 15px 0;
+        border-radius: 4px;
+    }
+
+    .flash.success {
+        background: #d4edda;
+        color: #155724;
+    }
+</style>
+
+</head>
+<body>
+
+<h1>Search Students</h1>
+
+<div class="search-card">
+    <form method="POST">
+        <input type="text" name="name" placeholder="Enter student name" required>
+        <button type="submit">Search</button>
+    </form>
+</div>
+
+{% for student in students %}
+<div class="course-card">
+    <h3>{{ student.name }}</h3>
+    <p>Email: {{ student.email }}</p>
+    <p>Course: {{ student.course.name }}</p>
+</div>
+{% endfor %}
+
+
+</body>
+</html>

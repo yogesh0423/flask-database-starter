@@ -29,6 +29,8 @@
     <nav>
         <a href="{{ url_for('index') }}">Students</a>
         <a href="{{ url_for('courses') }}">Courses</a>
+        <a href="{{ url_for('search_students') }}">Search Students</a>
+
     </nav>
 
     {% with messages = get_flashed_messages(with_categories=true) %}

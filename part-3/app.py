@@ -36,6 +36,7 @@ class Course(db.Model):  # Course table
     id = db.Column(db.Integer, primary_key=True)  # Auto-increment ID
     name = db.Column(db.String(100), nullable=False)  # Course name
     description = db.Column(db.Text)  # Optional description
+    
 
     # Relationship: One Course has Many Students
     students = db.relationship('Student', backref='course', lazy=True)
@@ -60,8 +61,8 @@ class Teacher(db.Model):  # Teacher table
     name = db.Column(db.String(100), nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)  # unique=True means no duplicates
 
-    # Relationship: One Teacher has Many Courses
-    courses = db.relationship('Course', backref='teacher', lazy=True)
+    # Foreign Key
+    course_id = db.Column(db.Integer, db.ForeignKey('course.id'), nullable=False)
 
     def __repr__(self):
         return f'<Teacher {self.name}>'
@@ -150,10 +151,18 @@ def add_course():
     return render_template('add_course.html')
 
 
-@app.route('/search')
+@app.route('/search', methods=['GET', 'POST'])
 def search_students():
-    students = Student.query.filter(Student.name.like('%a%')).all()
-    return render_template('index.html', students=students)
+    students = []
+
+    if request.method == 'POST':
+        name = request.form['name']
+        students = Student.query.filter(
+            Student.name.ilike(f'%{name}%')
+        ).all()
+
+    return render_template('search.html', students=students)
+
 
 
 @app.route('/students/sorted')
