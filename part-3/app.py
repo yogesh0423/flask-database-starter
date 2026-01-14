@@ -55,7 +55,8 @@ class Student(db.Model):  # Student table
 
     def __repr__(self):
         return f'<Student {self.name}>'
-    
+
+
 class Teacher(db.Model):  # Teacher table
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
@@ -135,6 +136,40 @@ def delete_student(id):
     return redirect(url_for('index'))
 
 
+@app.route('/delete/<int:id>')
+def delete_teacher(id):
+    teacher = Teacher.query.get_or_404(id)
+    db.session.delete(teacher)  # Delete the object
+    db.session.commit()
+
+    flash('Teacher deleted!', 'danger')
+    return redirect(url_for('index'))
+
+
+@app.route('/teachers')
+def teachers():
+    all_teachers = Teacher.query.all()  # Get all teachers
+    return render_template('teachers.html', teachers=all_teachers)
+
+
+@app.route('/add-teacher', methods=['GET', 'POST'])
+def add_teacher():
+    if request.method == 'POST':
+        name = request.form['name']
+        email = request.form['email']
+        course_id = request.form['course_id']
+
+        new_teacher = Teacher(name=name, email=email, course_id=course_id)
+        db.session.add(new_teacher)
+        db.session.commit()
+
+        flash('Teacher added successfully!', 'success')
+        return redirect(url_for('teachers'))
+
+    # courses = Course.query.all()  # Get courses for dropdown
+    return render_template('add_teacher.html')
+
+
 @app.route('/add-course', methods=['GET', 'POST'])
 def add_course():
     if request.method == 'POST':
@@ -149,21 +184,6 @@ def add_course():
         return redirect(url_for('courses'))
 
     return render_template('add_course.html')
-
-
-@app.route('/search', methods=['GET', 'POST'])
-def search_students():
-    students = []
-
-    if request.method == 'POST':
-        name = request.form['name']
-        students = Student.query.filter(
-            Student.name.ilike(f'%{name}%')
-        ).all()
-
-    return render_template('search.html', students=students)
-
-
 
 @app.route('/students/sorted')
 def sorted_students():
