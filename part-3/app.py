@@ -87,6 +87,12 @@ def courses():
     return render_template('courses.html', courses=all_courses)
 
 
+@app.route('/teachers')
+def teachers():
+    all_courses = Course.query.all()  # Get all courses
+    return render_template('teachers.html', courses=all_courses)
+
+
 @app.route('/add', methods=['GET', 'POST'])
 def add_student():
     if request.method == 'POST':
@@ -145,11 +151,6 @@ def delete_teacher(id):
     flash('Teacher deleted!', 'danger')
     return redirect(url_for('index'))
 
-
-@app.route('/teachers')
-def teachers():
-    all_teachers = Teacher.query.all()  # Get all teachers
-    return render_template('teachers.html', teachers=all_teachers)
 
 
 @app.route('/add-teacher', methods=['GET', 'POST'])
@@ -259,3 +260,7 @@ if __name__ == '__main__':
 # 2. Try different query methods: `filter()`, `order_by()`, `limit()`
 #
 # =============================================================================
+
+
+
+ 
